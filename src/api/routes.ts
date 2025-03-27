@@ -1,8 +1,10 @@
 import { Server } from "@hapi/hapi"
 import { ItemController } from '../controllers/ItemController'
+import { db } from "../config/database"
+import { Item } from "../entities/Item"
 
 export const defineRoutes = (server: Server) => {
-    const itemController = new ItemController()
+    const itemController = new ItemController(db.getRepository(Item))
 
     server.route({
         method: 'GET',

@@ -1,9 +1,8 @@
 import { Request, ResponseToolkit } from '@hapi/hapi'
-import { db } from '../config/database'
-import { Item } from '../entities/Item'
+import { ItemRepository } from '../repositories/ItemRepository'
 
 export class ItemController {
-    private itemRepository = db.getRepository(Item)
+    constructor(private itemRepository: ItemRepository) {}
 
     async list(_: Request, rt: ResponseToolkit) {
         const items = await this.itemRepository.find()
@@ -16,7 +15,7 @@ export class ItemController {
             return rt.response({ error: 'Invalid ID' }).code(400);
         }
 
-        const item = await this.itemRepository.findOneBy({ id })        
+        const item = await this.itemRepository.findOneBy({ id: Number(id) })        
         if (!item) {
             return rt.response({ message: 'Item not found' }).code(404)
         }
@@ -53,7 +52,7 @@ export class ItemController {
             return rt.response({ error: 'Invalid ID' }).code(400);
         }
 
-        const itemDb = await this.itemRepository.findOneBy({ id })
+        const itemDb = await this.itemRepository.findOneBy({ id: Number(id) })
         if (!itemDb) {
             return rt.response({ message: 'Item not found' }).code(404)
         }
@@ -87,7 +86,7 @@ export class ItemController {
             return rt.response({ error: 'Invalid ID' }).code(400);
         }
 
-        const item = await this.itemRepository.findOneBy({ id })
+        const item = await this.itemRepository.findOneBy({ id: Number(id) })
         if (!item) {
             return rt.response({ message: 'Item not found' }).code(404)
         }
