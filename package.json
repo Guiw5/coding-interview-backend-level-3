@@ -9,6 +9,7 @@
     "dev": "nodemon --legacy-watch src --ext ts --exec \"tsx --env-file .env.local src/index.ts\"",
     "build": "swc src -d dist --strip-leading-paths",
     "test": "jest e2e",
+    "migration:create": "npm run typeorm -- migration:create src/migrations/$npm_config_name",
     "migration:generate": "npm run typeorm -- migration:generate src/migrations/$npm_config_name --dataSource src/config/database.ts",
     "migration:run": "npm run typeorm -- migration:run --dataSource src/config/database.ts",
     "migration:revert": "npm run typeorm -- migration:revert --dataSource src/config/database.ts",
