@@ -1,8 +1,19 @@
-import { initializeServer, startServer } from "./server"
+import "reflect-metadata"
+import { initializeServer, stopServer } from './server';
 
-process.on('unhandledRejection', (err) => {
-    console.error(err)
-    process.exit(1)
+initializeServer();
+
+process.on('unhandledRejection', async (err) => {
+    console.error('Unhandled Rejection:', err);   
 })
 
-startServer();
+process.on('uncaughtException', async (err) => {
+    console.error('Uncaught Exception:', err);    
+})
+
+process.on('SIGTERM', async () => {
+    console.log('SIGTERM signal received: closing HTTP server.');
+    await stopServer();
+    console.log('HTTP server closed.');
+    process.exit(0);
+})

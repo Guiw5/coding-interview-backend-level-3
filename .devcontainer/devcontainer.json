@@ -4,5 +4,7 @@
 	"build": {
 		"dockerfile": "Dockerfile"
 	},
-  "remoteUser": "node"
+	"remoteUser": "node",
+	"postCreateCommand": "npm install && npm rebuild sqlite3"
+
 }

@@ -1,26 +1,34 @@
 import Hapi from '@hapi/hapi'
-import { defineRoutes } from './routes'
+import { defineRoutes } from './api/routes'
+import { db, initializeDatabase } from './config/database';
 
-const getServer = () => {
-    const server = Hapi.server({
-        host: 'localhost',
-        port: 3000,
-    })
+let server: Hapi.Server | null;
+const isTest = process.env.NODE_ENV === 'test'
+const host = process.env.HOST || '0.0.0.0'
+const port = parseInt(process.env.PORT!) || 3000
 
+const initializeServer = async () => {    
+    await initializeDatabase()
+    server = Hapi.server({ host, port })
     defineRoutes(server)
-
+    
+    if (isTest) {
+        await server.initialize()
+        console.log(`Server test on ${server.info.uri}`)    
+    } else {
+        await server.start()
+        console.log(`Server running on ${server.info.uri}`)
+    }
     return server
 }
 
-export const initializeServer = async () => {
-    const server = getServer()
-    await server.initialize()
-    return server
+const stopServer = async () => {
+    if (server) {
+        await server.stop()
+        await db.destroy()
+        console.log(`Server stopped`)
+        server = null
+    }
 }
 
-export const startServer = async () => {
-    const server = getServer()
-    await server.start()
-    console.log(`Server running on ${server.info.uri}`)
-    return server
-};
+export { initializeServer, stopServer }

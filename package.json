@@ -2,12 +2,17 @@
   "name": "coding-interview-backend-level-3",
   "version": "1.0.0",
   "description": "Coding Interview Backend Level 3",
+  "type": "commonjs",
   "main": "src/index.ts",
   "scripts": {
-    "start": "tsx src/index.ts",
-    "dev": "nodemon --legacy-watch src --ext ts --exec \"tsx src/index.ts\"",
-    "build": "swc src -d dist",
-    "test": "jest e2e"
+    "start": "tsx --env-file .env.local src/index.ts",
+    "dev": "nodemon --legacy-watch src --ext ts --exec \"tsx --env-file .env.local src/index.ts\"",
+    "build": "swc src -d dist --strip-leading-paths",
+    "test": "jest e2e",
+    "migration:generate": "npm run typeorm -- migration:generate src/migrations/$npm_config_name --dataSource src/config/database.ts",
+    "migration:run": "npm run typeorm -- migration:run --dataSource src/config/database.ts",
+    "migration:revert": "npm run typeorm -- migration:revert --dataSource src/config/database.ts",
+    "typeorm": "tsx ./node_modules/typeorm/cli.js"
   },
   "author": "El Dorado Dev Team",
   "license": "ISC",
@@ -23,6 +28,9 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "@hapi/hapi": "^21.3.10"
+    "@hapi/hapi": "^21.3.10",
+    "reflect-metadata": "^0.2.2",
+    "sqlite3": "^5.1.7",
+    "typeorm": "^0.3.21"
   }
 }
