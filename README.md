@@ -1,6 +1,10 @@
 # Coding Interview Backend Level 3
 
-This project is a REST API developed with Node.js, TypeScript, and Hapi.js, designed to manage a list of items.
+This project is a REST API developed with Node.js, TypeScript, and Hapi.js, designed to manage a list of items. It was developed as part of a coding challenge for El Dorado.
+
+## 🎯 Challenge
+
+This project was developed as part of a coding challenge. You can find the original challenge requirements in [CHALLENGE.md](./CHALLENGE.md).
 
 ## 🚀 Technologies
 
@@ -78,6 +82,10 @@ npm run migration:create --name=NewMigration
 ```
 
 This will create a new migration file in `src/migrations/` with the timestamp and the name you provided.
+
+## 📚 API Documentation
+
+The API documentation is available through Swagger UI when the server is running: http://127.0.0.1:3000/documentation
 
 ## 🧪 Testing
 
