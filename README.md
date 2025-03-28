@@ -85,7 +85,9 @@ This will create a new migration file in `src/migrations/` with the timestamp an
 
 ## 📚 API Documentation
 
-The API documentation is available through Swagger UI when the server is running: http://127.0.0.1:3000/documentation
+The API documentation is available through Swagger UI when the server is running:
+- Development: http://127.0.0.1:3000/documentation
+- Production: https://eldoradochallengue.onrender.com/documentation
 
 ## 🧪 Testing
 
