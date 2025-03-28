@@ -3,8 +3,7 @@ import { Item } from "../entities/Item"
 import { CreateItemTable1709876543210 } from "../migrations/1709876543210-CreateItemTable"
 
 const isTest = process.env.NODE_ENV === 'test'
-const dbPath = process.env.DB_PATH || "database.sqlite"
-const database = isTest ? ":memory:" : dbPath
+const database = isTest ? ":memory:" :  "data/database.sqlite"
 
 export const db = new DataSource({
     type: "sqlite",
