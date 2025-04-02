@@ -1,15 +1,37 @@
-version: '3.8'
-
 services:
+  postgres:
+    image: postgres:16-alpine
+    hostname: ${POSTGRES_HOST:-postgres}
+    environment:
+      POSTGRES_USER: ${PGUSER:-postgres}
+      POSTGRES_PASSWORD: ${PGPASSWORD:-postgres}
+      POSTGRES_DB: ${PGDATABASE:-items_db}
+    ports:
+      - "${PGPORT:-5432}:${PGPORT:-5432}"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PGUSER:-postgres}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   app:
     build: .
     ports:
-      - "${PORT:-3000}:${PORT:-3000}"
-    volumes:
-      - sqlite_data:/app/dist/data
+      - "${PORT}:${PORT}"
+    environment:
+      - PGHOST=${PGHOST:-postgres}
+      - PGUSER=${PGUSER:-postgres}
+      - PGPORT=${PGPORT:-5432}
+      - PGPASSWORD=${PGPASSWORD:-postgres}
+      - PGDATABASE=${PGDATABASE:-items_db}
+    depends_on:
+      postgres:
+        condition: service_healthy
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--spider", "http://localhost:${PORT:-3000}/ping"]
+      test: ["CMD", "wget", "--spider", "http://localhost:${PORT}/ping"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -23,5 +45,5 @@ services:
           memory: 512M
 
 volumes:
-  sqlite_data:
+  postgres_data:
     driver: local

@@ -14,4 +14,5 @@ module.exports = {
   testMatch: ['**/*.test.ts'],
   testPathIgnorePatterns: ['/node_modules/'],
   detectOpenHandles: true,
+  setupFiles: ['<rootDir>/jest.setup.js'],
 };
