@@ -6,7 +6,8 @@
   "main": "src/index.ts",
   "scripts": {
     "build": "swc src -d dist --strip-leading-paths",
-    "test": "jest e2e",
+    "test": "jest --config=e2e/jest.config.js",
+    "start": "tsx watch --env-file=.env src/index.ts",
     "test:unit": "jest src/__tests__",
     "docker:start": "docker-compose up --build",
     "docker:restart": "docker-compose restart",

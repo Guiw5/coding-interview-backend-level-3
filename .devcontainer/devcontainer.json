@@ -5,9 +5,6 @@
   "dockerComposeFile": ["docker-compose.yml"],
   "service": "dev",
   "workspaceFolder": "/workspace",
-  "forwardPorts": [3000, 5432],
-  "postCreateCommand": "npm install && npm run test",
-  "remoteEnv": {
-    "NODE_ENV": "test"
-  }
+  "forwardPorts": [3000, 5432, 5433],
+  "postCreateCommand": "npm install && npm run test"
 }

@@ -1,5 +1,12 @@
 /** @type {import('jest').Config} */
 module.exports = {
+  
+  testEnvironment: 'node',
+  verbose: true
+}; 
+
+/** @type {import('jest').Config} */
+module.exports = {
   transform: {
     '^.+\\.(t|j)sx?$': '@swc/jest',
   },
@@ -12,5 +19,7 @@ module.exports = {
   coverageProvider: 'v8',
   coverageReporters: ['json', 'text', 'lcov', 'clover'],
   testPathIgnorePatterns: ['/node_modules/'],
-  detectOpenHandles: true
+  detectOpenHandles: true,
+  setupFilesAfterEnv: ['./setup.ts'],
+  verbose: true
 };

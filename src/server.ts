@@ -4,7 +4,6 @@ import { db, initializeDatabase } from './config/database';
 import Inert from '@hapi/inert'
 import Vision from '@hapi/vision'
 import HapiSwagger from 'hapi-swagger'
-import { Item } from './entities/Item';
 
 let server: Hapi.Server | null;
 const isTest = process.env.NODE_ENV === 'test'
@@ -12,8 +11,6 @@ const host = process.env.HOST || '0.0.0.0'
 const port = parseInt(process.env.PORT!) || 3000
 
 const initializeServer = async () => {    
-    await initializeDatabase()
-
     if (server) return server;
 
     server = Hapi.server({ 
@@ -62,11 +59,8 @@ const initializeServer = async () => {
 }
 
 const stopServer = async () => {
-    if (db.isInitialized) {
-        await db.destroy()
-        console.log('🛑 Database connection closed')
-    }
     if (server) {
+        console.log('🛑 Stopping Server')
         await server.stop()
         console.log('🛑 Server stopped')
         server = null
