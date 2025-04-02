@@ -13,6 +13,13 @@ const password = process.env.PGPASSWORD
 const isTest = process.env.NODE_ENV === 'test'
 const testPort = parseInt(process.env.TEST_PORT || "5433")
 const testHost = process.env.TEST_HOST
+
+// production setup
+const isProd = process.env.NODE_ENV === 'production'
+const ssl = isProd ? {
+    rejectUnauthorized: false
+} : false
+
 export const db = new DataSource({
     type: "postgres",
     database,
@@ -27,6 +34,7 @@ export const db = new DataSource({
     migrations: [CreateItemTable1709876543210],
     subscribers: [],
     migrationsRun: true,
+    ssl
 })
 
 export const initializeDatabase = async () => {
