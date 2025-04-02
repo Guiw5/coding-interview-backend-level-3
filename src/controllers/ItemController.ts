@@ -4,6 +4,19 @@ import { ItemRepository } from '../repositories/ItemRepository'
 export class ItemController {
     constructor(private itemRepository: ItemRepository) {}
 
+    private validateExtraProps(payload: any, allowedProps: string[]) {
+        const extraProps = Object.keys(payload).filter(prop => !allowedProps.includes(prop))
+        if (extraProps.length > 0) {
+            return {
+                errors: [{
+                    field: extraProps[0],
+                    message: `Unexpected property "${extraProps[0]}"`
+                }]
+            }
+        }
+        return null
+    }
+
     async list(_: Request, rt: ResponseToolkit) {
         const items = await this.itemRepository.find()
         return rt.response(items).code(200)
@@ -24,8 +37,22 @@ export class ItemController {
     }
 
     async create(request: Request, rt: ResponseToolkit) {
-        const { name, price } = request.payload as { name?: string, price?: number }
+        const payload = request.payload
+        if (!payload) {
+            return rt.response({ message: 'No payload provided' }).code(400)
+        }
+
+        if (typeof payload !== 'object') {
+            return rt.response({ message: 'Invalid payload' }).code(400)
+        }
         
+        const allowedProps = ['name', 'price']
+        const extraPropsError = this.validateExtraProps(payload, allowedProps)
+        if (extraPropsError) {
+            return rt.response(extraPropsError).code(400)
+        }
+
+        const { name, price } = payload as { name?: string, price?: number }
         if (!name || !price) {
             return rt.response({
                 errors: [{
@@ -57,11 +84,18 @@ export class ItemController {
             return rt.response({ message: 'Item not found' }).code(404)
         }
 
-        if (!request.payload) {
+        const payload = request.payload as any
+        if (!payload) {
             return rt.response({ message: 'No payload provided' }).code(400)
         }
 
-        const { name, price } = request.payload as { name?: string, price?: number }    
+        const allowedProps = ['name', 'price']
+        const extraPropsError = this.validateExtraProps(payload, allowedProps)
+        if (extraPropsError) {
+            return rt.response(extraPropsError).code(400)
+        }
+
+        const { name, price } = payload
         if (!name && !price) {
             return rt.response({ message: 'At least one field is required' }).code(400)
         }

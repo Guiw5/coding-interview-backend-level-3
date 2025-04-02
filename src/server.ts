@@ -1,10 +1,10 @@
-import Joi from 'joi';
 import Hapi from '@hapi/hapi'
 import { defineRoutes } from './api/routes'
 import { db, initializeDatabase } from './config/database';
 import Inert from '@hapi/inert'
 import Vision from '@hapi/vision'
 import HapiSwagger from 'hapi-swagger'
+import { Item } from './entities/Item';
 
 let server: Hapi.Server | null;
 const isTest = process.env.NODE_ENV === 'test'
@@ -13,11 +13,13 @@ const port = parseInt(process.env.PORT!) || 3000
 
 const initializeServer = async () => {    
     await initializeDatabase()
+
+    if (server) return server;
+
     server = Hapi.server({ 
         host, 
         port,
         debug: {
-            request: ['error', 'implementation'],
             log: ['error', 'implementation']
         }
     })
@@ -50,19 +52,22 @@ const initializeServer = async () => {
     
     if (isTest) {
         await server.initialize()
-        console.log('🚀 Server test on:', server.info.uri)    
+        console.log('🚀 Server test on:', `http://localhost:${port}`)    
     } else {
         await server.start()
-        console.log('🚀 Server running on:', server.info.uri)
-        console.log('📚 Swagger docs at:', server.info.uri + '/documentation')
+        console.log('🚀 Server running on:', `http://localhost:${port}`)
+        console.log('📚 Swagger docs at:', `http://localhost:${port}/documentation`)
     }
     return server
 }
 
 const stopServer = async () => {
+    if (db.isInitialized) {
+        await db.destroy()
+        console.log('🛑 Database connection closed')
+    }
     if (server) {
         await server.stop()
-        await db.destroy()
         console.log('🛑 Server stopped')
         server = null
     }

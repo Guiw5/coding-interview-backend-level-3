@@ -1,4 +1,4 @@
-import { initializeServer } from '../src/server'
+import { initializeServer, stopServer } from '../src/server'
 import { Server } from '@hapi/hapi'
 
 describe('E2E Tests', () => {
@@ -9,7 +9,7 @@ describe('E2E Tests', () => {
         price: number
     }
 
-    beforeEach(async () => {
+    beforeAll(async () => {
         server = await initializeServer()
     })
 
@@ -227,7 +227,8 @@ describe('E2E Tests', () => {
         })
     })
 
-    afterAll(() => {
-        return server.stop()
+    afterAll(async () => {
+        console.log("Stopping server...")
+        await stopServer()
     })
 })

@@ -1,4 +1,3 @@
-import Joi from "joi"
 import { Server } from "@hapi/hapi"
 import { ItemController } from '../controllers/ItemController'
 import { db } from "../config/database"
@@ -33,7 +32,7 @@ export const defineRoutes = (server: Server) => {
         handler: (request, rt) => itemController.get(request, rt),
         options: {
             tags: ['api', 'items'],
-            description: 'Get an item by its ID',            
+            description: 'Get an item by its ID',
         }
     })
 
