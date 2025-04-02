@@ -1,4 +1,4 @@
-import { DataSource, DataSourceOptions } from "typeorm"
+import { DataSource } from "typeorm"
 import { Item } from "../entities/Item"
 import { CreateItemTable1709876543210 } from "../migrations/1709876543210-CreateItemTable"
 
@@ -8,7 +8,6 @@ const port = parseInt(process.env.PGPORT || "5432")
 const username = process.env.PGUSER || "postgres"
 const password = process.env.PGPASSWORD || "postgres"
 const dropSchema = Boolean(process.env.NODE_ENV === "test")
-    
 export const db = new DataSource({
     type: "postgres",
     database,

@@ -1,10 +1,13 @@
 // See https://containers.dev/implementors/json_reference/ for configuration reference
 {
 	"name": "Coding Interview Backend Level 3",
-	"build": {
-		"dockerfile": "Dockerfile"
-	},
 	"remoteUser": "node",
-	"postCreateCommand": "npm install && npm rebuild sqlite3"
-
+  "dockerComposeFile": ["docker-compose.yml"],
+  "service": "dev",
+  "workspaceFolder": "/workspace",
+  "forwardPorts": [3000, 5432],
+  "postCreateCommand": "npm install && npm run test",
+  "remoteEnv": {
+    "NODE_ENV": "test"
+  }
 }
