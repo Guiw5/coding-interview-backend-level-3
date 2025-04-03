@@ -20,7 +20,8 @@ This project was developed as part of a coding challenge. You can find the origi
 
 - Node.js (v20 or higher)
 - npm (v9 or higher)
-- Docker and Docker Compose (optional)
+- Docker and Docker Compose
+- VS Code with Remote Containers extension (optional)
 - PostgreSQL (if running locally)
 
 ## 🔧 Installation
@@ -48,13 +49,17 @@ PORT=3000
 
 # Database
 PGPORT=5432
-PGHOST=localhost
+PGHOST=postgres
 PGUSER=postgres
 PGPASSWORD=postgres
 PGDATABASE=items_db
 
 # Test Database
-TEST_DB_NAME=items_db_test
+TEST_PORT=5433
+TEST_HOST=postgres_test
+
+NODE_ENV=development=items_db_test
+
 ```
 
 4. Set up the database:
@@ -69,29 +74,46 @@ docker-compose up -d
 npm run migration:run
 ```
 
-## 🛠️ Available Scripts
+## 🛠️ Development
 
-### Development
+### Using DevContainer (Recommended)
+
+The project includes a DevContainer configuration that provides a consistent development environment with:
+- Node.js 20
+- PostgreSQL for development
+- PostgreSQL for testing
+- All necessary tools pre-installed
+
+To use the DevContainer:
+1. Open the project in VS Code
+2. Press F1 and select "Dev Containers: Rebuild and Reopen in Container"
+3. Wait for the container to build and start
+
+### Available Commands
+
+#### Development
+- `npm start`: Starts the server in development mode with hot-reload
 - `npm run build`: Compiles the TypeScript project to JavaScript
 
-### Docker
+#### Docker
 - `npm run docker:start`: Starts and rebuilds Docker containers 
 - `npm run docker:restart`: Restarts Docker containers
 
-### Database
+#### Database
 - `npm run migration:create`: Creates an empty migration file
 - `npm run migration:generate`: Generates a new migration based on entity changes
 - `npm run migration:run`: Runs pending migrations
 - `npm run migration:revert`: Reverts the last migration
 
-### Testing
-- `npm test`: Runs end-to-end tests
+#### Testing
+- `npm test`: Runs end-to-end (e2e) tests
 - `npm run test:unit`: Runs unit tests
 
 ## 📁 Project Structure
 
 ```
 src/
+├── __tests__/     # Unit tests
 ├── api/           # Routes and API configuration
 ├── config/        # Configurations (database, etc.)
 ├── controllers/   # Application controllers
@@ -99,6 +121,11 @@ src/
 ├── migrations/    # Database migrations
 ├── index.ts       # Application entry point
 └── server.ts      # Server configuration
+
+e2e/
+├── index.test.ts  # End-to-end tests
+|── setup.ts       # e2e db setup
+└── jest.config.js # jest configuration
 ```
 
 ## 🔄 Database Migrations
@@ -117,27 +144,32 @@ npm run migration:create --name=NewMigration
 
 This will create a new migration file in `src/migrations/` with the timestamp and the name you provided.
 
-## 📚 API Documentation
-
-The API documentation is available through Swagger UI when the server is running:
-- Development: http://127.0.0.1:3000/documentation
-- Production: https://eldoradochallengue.onrender.com/documentation
-
 ## 🧪 Testing
 
-The application uses a separate PostgreSQL database for tests to avoid interfering with development data.
+The project includes two types of tests:
 
-e2e
+### Unit Tests
+Unit tests are located in `src/__tests__/` and can be run with:
 ```bash
-# Run tests
+npm run test:unit
+```
+
+### End-to-End Tests
+End-to-end tests are located in `e2e/` and can be run with:
+```bash
 npm test
 ```
 
-unit testing
-```bash
-# Run tests
-npm test:unit
-```
+## 📚 API Documentation
+
+The API documentation is available through Swagger UI when the server is running:
+- Development: http://localhost:3000/documentation
+- Production: https://eldoradochallengue.onrender.com/documentation
+
+### Production Environment Notes
+> ⚠️ **Important Note:** The production environment is hosted on Render.com and has a cold start behavior. The service may take up to 1 minute to wake up if there has been no recent traffic. The documentation will be available once the service is fully awake.
+
+> 🔍 **Status Check:** You can verify the service status at: https://eldoradochallengue.onrender.com/ping
 
 ## 📦 Build
 

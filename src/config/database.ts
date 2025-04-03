@@ -11,7 +11,6 @@ const password = process.env.PGPASSWORD
 
 // test setup
 const isTest = process.env.NODE_ENV === 'test'
-const testPort = parseInt(process.env.TEST_PORT || "5433")
 const testHost = process.env.TEST_HOST
 
 // production setup
