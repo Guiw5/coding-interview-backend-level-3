@@ -58,7 +58,7 @@ PGDATABASE=items_db
 TEST_PORT=5433
 TEST_HOST=postgres_test
 
-NODE_ENV=development=items_db_test
+NODE_ENV=development
 
 ```
 
