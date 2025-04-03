@@ -13,6 +13,6 @@ module.exports = {
   coverageReporters: ['json', 'text', 'lcov', 'clover'],
   testPathIgnorePatterns: ['/node_modules/'],
   detectOpenHandles: true,
-  setupFilesAfterEnv: ['./setup.ts'],
-  verbose: true
+  setupFiles: ['./jest.setup.ts'],
+  setupFilesAfterEnv: ['./setup.ts']
 };

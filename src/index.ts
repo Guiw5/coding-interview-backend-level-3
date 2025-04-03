@@ -2,8 +2,9 @@ import "reflect-metadata"
 import { initializeServer, stopServer } from './server';
 import { initializeDatabase, stopDatabase } from "./config/database";
 
-initializeDatabase();
-initializeServer();
+initializeDatabase().then(() => {
+    initializeServer();
+})
 
 process.on('unhandledRejection', async (err) => {
     console.error('Unhandled Rejection:', err);   

@@ -4,14 +4,13 @@ import { CreateItemTable1709876543210 } from "../migrations/1709876543210-Create
 
 // dev setup
 const database = process.env.PGDATABASE
-const devHost = process.env.PGHOST
-const devPort = parseInt(process.env.PGPORT || "5432")
+const host = process.env.PGHOST
+const port = parseInt(process.env.PGPORT || "5432")
 const username = process.env.PGUSER
 const password = process.env.PGPASSWORD
 
 // test setup
 const isTest = process.env.NODE_ENV === 'test'
-const testHost = process.env.TEST_HOST
 
 // production setup
 const isProd = process.env.NODE_ENV === 'production'
@@ -22,8 +21,8 @@ const ssl = isProd ? {
 export const db = new DataSource({
     type: "postgres",
     database,
-    host: isTest ? testHost : devHost,
-    port: devPort,
+    host,
+    port,
     username,
     password,
     synchronize: false,
@@ -40,7 +39,7 @@ export const initializeDatabase = async () => {
     try {
         if (!db.isInitialized) {
             await db.initialize()
-            console.log("Database has been initialized with params:", db.options)
+            console.log("Database has been initialized")
         }
     } catch (error) {
         console.error("Error during database initialization:", error)

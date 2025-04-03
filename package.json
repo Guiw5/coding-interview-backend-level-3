@@ -9,13 +9,10 @@
     "test": "jest --config=e2e/jest.config.js",
     "start": "tsx watch --env-file=.env src/index.ts",
     "test:unit": "jest src/__tests__",
-    "docker:start": "docker-compose up --build",
-    "docker:restart": "docker-compose restart",
-    "migration:create": "npm run typeorm -- migration:create src/migrations/$npm_config_name",
-    "migration:generate": "npm run typeorm -- migration:generate src/migrations/$npm_config_name --dataSource src/config/database.ts",
-    "migration:run": "npm run typeorm -- migration:run --dataSource src/config/database.ts",
-    "migration:revert": "npm run typeorm -- migration:revert --dataSource src/config/database.ts",
-    "typeorm": "tsx ./node_modules/typeorm/cli.js"
+    "start:local": "npm run start:db:local && npm run start",
+    "test:local": "npm run start:db:test && npm run test",
+    "start:db:local": "docker compose -f .devcontainer/docker-compose.yml up postgres -d",
+    "start:db:test": "docker compose -f .devcontainer/docker-compose.yml up postgres_test -d"
   },
   "author": "El Dorado Dev Team",
   "license": "ISC",
@@ -24,9 +21,7 @@
     "@swc/core": "^1.7.2",
     "@swc/jest": "^0.2.36",
     "@types/jest": "^29.5.12",
-    "dotenv": "^16.4.7",
     "jest": "^29.7.0",
-    "mocha": "^10.7.0",
     "nodemon": "^3.1.9",
     "tsx": "^4.19.3",
     "typescript": "^5.5.4"

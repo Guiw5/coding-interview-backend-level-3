@@ -22,7 +22,6 @@ This project was developed as part of a coding challenge. You can find the origi
 - npm (v9 or higher)
 - Docker and Docker Compose
 - VS Code with Remote Containers extension (optional)
-- PostgreSQL (if running locally)
 
 ## 🔧 Installation
 
@@ -39,39 +38,8 @@ npm install
 
 3. Set up environment variables:
 ```bash
-cp .env.example .env
-```
-
-Configure the following variables in your `.env` file:
-```env
-# Server
-PORT=3000
-
-# Database
-PGPORT=5432
-PGHOST=postgres
-PGUSER=postgres
-PGPASSWORD=postgres
-PGDATABASE=items_db
-
-# Test Database
-TEST_PORT=5433
-TEST_HOST=postgres_test
-
-NODE_ENV=development
-
-```
-
-4. Set up the database:
-
-Using Docker:
-```bash
-docker-compose up -d
-```
-
-5. Run migrations:
-```bash
-npm run migration:run
+cp .env.example .env 
+cp .env.example .devcontainer/.env
 ```
 
 ## 🛠️ Development
@@ -80,8 +48,8 @@ npm run migration:run
 
 The project includes a DevContainer configuration that provides a consistent development environment with:
 - Node.js 20
-- PostgreSQL for development
-- PostgreSQL for testing
+- PostgreSQL for development db
+- PostgreSQL for testing db
 - All necessary tools pre-installed
 
 To use the DevContainer:
@@ -89,29 +57,41 @@ To use the DevContainer:
 2. Press F1 and select "Dev Containers: Rebuild and Reopen in Container"
 3. Wait for the container to build and start
 
-### Available Commands
-
-#### Development
-- `npm start`: Starts the server in development mode with hot-reload
+### Available Commands (in DevContainer)
+- `npm run start`: Starts the server in development mode with hot-reload
+- `npm run test`: Runs end-to-end (e2e) tests
+- `npm run test:unit`: Runs unit tests
 - `npm run build`: Compiles the TypeScript project to JavaScript
 
-#### Docker
-- `npm run docker:start`: Starts and rebuilds Docker containers 
-- `npm run docker:restart`: Restarts Docker containers
 
-#### Database
-- `npm run migration:create`: Creates an empty migration file
-- `npm run migration:generate`: Generates a new migration based on entity changes
-- `npm run migration:run`: Runs pending migrations
-- `npm run migration:revert`: Reverts the last migration
+### Using Local Environment
+ensure you have added 127.0.0.1 postgres in /etc/hosts file
+```bash
+echo "127.0.0.1 postgres" | sudo tee -a /etc/hosts
+```
 
-#### Testing
-- `npm test`: Runs end-to-end (e2e) tests
+### Available Commands (out DevContainer)
+- `npm run start:local`: Starts the server in development mode with hot-reload
+- `npm run test:local`: Runs end-to-end (e2e) tests
 - `npm run test:unit`: Runs unit tests
+- `npm run build`: Compiles the TypeScript project to JavaScript
+
 
 ## 📁 Project Structure
 
 ```
+.devcontainer/
+├── .env                # Environment variables for development (example copy)
+|── devcontainer.json   # DevContainer context configuration
+|── docker-compose.yml  # DevContainer services setup
+└── Dockerfile          # DevContainer context builder
+
+e2e/
+├── index.test.ts  # End-to-end tests
+|── jest.config.js # jest configuration
+|── jest.setup.ts  # e2e db environment variables
+└── setup.ts       # e2e db initialization
+
 src/
 ├── __tests__/     # Unit tests
 ├── api/           # Routes and API configuration
@@ -122,27 +102,9 @@ src/
 ├── index.ts       # Application entry point
 └── server.ts      # Server configuration
 
-e2e/
-├── index.test.ts  # End-to-end tests
-|── setup.ts       # e2e db setup
-└── jest.config.js # jest configuration
+.env.example       # Environment variables 
+Dockerfile         # Builder for production deployment
 ```
-
-## 🔄 Database Migrations
-
-When you make changes to your entities, you can generate a new migration:
-
-```bash
-npm run migration:generate --name=NewUpdate
-```
-
-Or create an empty migration file:
-
-```bash
-npm run migration:create --name=NewMigration
-```
-
-This will create a new migration file in `src/migrations/` with the timestamp and the name you provided.
 
 ## 🧪 Testing
 
@@ -156,9 +118,15 @@ npm run test:unit
 
 ### End-to-End Tests
 End-to-end tests are located in `e2e/` and can be run with:
+In Devcontainer
 ```bash
 npm test
 ```
+or Local env
+```bash
+npm test:local
+```
+
 
 ## 📚 API Documentation
 
