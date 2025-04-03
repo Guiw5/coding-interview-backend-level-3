@@ -1,6 +1,5 @@
 import Hapi from '@hapi/hapi'
 import { defineRoutes } from './api/routes'
-import { db, initializeDatabase } from './config/database';
 import Inert from '@hapi/inert'
 import Vision from '@hapi/vision'
 import HapiSwagger from 'hapi-swagger'

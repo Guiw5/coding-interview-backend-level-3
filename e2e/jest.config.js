@@ -1,12 +1,5 @@
 /** @type {import('jest').Config} */
 module.exports = {
-  
-  testEnvironment: 'node',
-  verbose: true
-}; 
-
-/** @type {import('jest').Config} */
-module.exports = {
   transform: {
     '^.+\\.(t|j)sx?$': '@swc/jest',
   },
