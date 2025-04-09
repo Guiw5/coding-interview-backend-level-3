@@ -1,23 +1,27 @@
 import "reflect-metadata"
+import Hapi from '@hapi/hapi';
 import { initializeServer, stopServer } from './server';
 import { initializeDatabase, stopDatabase } from "./config/database";
 
+let server: Hapi.Server | null = null;
+
 initializeDatabase().then(() => {
-    initializeServer();
+    initializeServer().then((s) => {
+        server = s;
+    });
 })
 
 process.on('unhandledRejection', async (err) => {
-    console.error('Unhandled Rejection:', err);   
+    server?.logger.error('Unhandled Rejection:', err);   
 })
 
 process.on('uncaughtException', async (err) => {
-    console.error('Uncaught Exception:', err);    
+    server?.logger.error('Uncaught Exception:', err);    
 })
 
 process.on('SIGTERM', async () => {
-    console.log('SIGTERM signal received: closing HTTP server.');
+    server?.logger.warn('SIGTERM signal received: closing HTTP server.');
     await stopDatabase();
     await stopServer();
-    console.log('HTTP server closed.');
     process.exit(0);
 })

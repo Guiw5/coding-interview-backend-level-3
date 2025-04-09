@@ -2,6 +2,7 @@ import { Server } from "@hapi/hapi"
 import { ItemController } from '../controllers/ItemController'
 import { db } from "../config/database"
 import { Item } from "../entities/Item"
+import { itemSchema } from '../schemas/itemSchema'
 
 export const defineRoutes = (server: Server) => {
     const itemController = new ItemController(db.getRepository(Item))
@@ -33,6 +34,9 @@ export const defineRoutes = (server: Server) => {
         options: {
             tags: ['api', 'items'],
             description: 'Get an item by its ID',
+            validate: {
+                params: itemSchema.id
+            }
         }
     })
 
@@ -43,6 +47,9 @@ export const defineRoutes = (server: Server) => {
         options: {
             tags: ['api', 'items'],
             description: 'Create a new item',
+            validate: {
+                payload: itemSchema.create
+            }
         }
     })
 
@@ -53,6 +60,10 @@ export const defineRoutes = (server: Server) => {
         options: {
             tags: ['api', 'items'],
             description: 'Update an existing item',
+            validate: {
+                params: itemSchema.id,
+                payload: itemSchema.update
+            }
         }
     })
 
@@ -63,6 +74,9 @@ export const defineRoutes = (server: Server) => {
         options: {
             tags: ['api', 'items'],
             description: 'Delete an item',
+            validate: {
+                params: itemSchema.id
+            }
         }
     })
 }
