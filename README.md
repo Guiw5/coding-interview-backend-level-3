@@ -27,7 +27,7 @@ This project was developed as part of a coding challenge. You can find the origi
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/Guiw5/coding-interview-backend-level-3
 cd coding-interview-backend-level-3
 ```
 
